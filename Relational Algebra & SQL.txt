@@ -1,0 +1,39 @@
+1. Return the full name of bakers who placed 2nd in at least ONE technical.
+
+SELECT DISTINCT bakers.fullname FROM bakers
+JOIN technicals ON bakers.baker = technicals.baker
+WHERE technicals.rank = 2;
+
+2. Return the full name of bakers who placed 2nd in at least one technical, but NEVER placed 1st.
+
+SELECT DISTINCT bakers.fullname FROM bakers
+JOIN technicals ON bakers.baker = technicals.baker
+WHERE technicals.rank = 2 AND bakers.baker NOT IN (SELECT technicals.baker FROM technicals WHERE technicals.rank = 1);
+
+3. Return the full name and hometown of the bakers who used raisins in a signature dish.
+
+SELECT DISTINCT bakers.fullname, bakers.hometown FROM bakers
+JOIN signatures ON bakers.baker = signatures.baker
+WHERE signatures.make LIKE '%raisin%';
+
+4. Return the hometown of the bakers who used Hazelnut in either a signature dish or a showstopper dish.
+
+SELECT DISTINCT bakers.hometown FROM bakers
+JOIN signatures ON bakers.baker = signatures.baker
+JOIN showstoppers ON bakers.baker = showstoppers.baker
+WHERE signatures.make LIKE '%Hazelnut%' OR showstoppers.make LIKE '%Hazelnut%'
+
+5. Return the full name and episode eliminated of all bakers who were eliminated before episode 5.
+
+SELECT bakers.fullname, results.episodeid FROM bakers
+JOIN results ON bakers.baker = results.baker
+JOIN episodes ON results.episodeid = episodes.id
+WHERE results.result = 'eliminated' AND results.episodeid < 5;
+
+6. Return the first name and showstopper makes of each star baker for all episodes.
+
+SELECT bakers.fullname, showstoppers.make FROM bakers
+JOIN results ON bakers.baker = results.baker
+JOIN showstoppers ON bakers.baker = showstoppers.baker AND results.episodeid = showstoppers.episodeid
+WHERE results.result = 'star baker';
+
